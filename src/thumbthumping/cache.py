@@ -64,11 +64,14 @@ INSERT OR IGNORE INTO meta (key, value) VALUES ('schema_v', '{_SCHEMA_V}');
 
 
 def _file_hash(filepath: Path) -> str:
-    """Compute MD5 hash of a file's contents."""
+    """Compute MD5 hash of the first 1MB of a file.
+
+    Fast enough for network storage (SAMBA) while still being unique
+    for deduplication across different paths.
+    """
     h = hashlib.md5()
     with open(filepath, "rb") as f:
-        for chunk in iter(lambda: f.read(1 << 20), b""):
-            h.update(chunk)
+        h.update(f.read(1 << 20))  # first 1MB
     return h.hexdigest()
 
 

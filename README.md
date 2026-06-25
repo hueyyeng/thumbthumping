@@ -49,7 +49,7 @@ All commands accept `-v` for debug logging and `-C PATH` to set a custom cache d
 
 Thumbnails are stored as **BLOBs inside a single SQLite database** (`~/.thumbthumping/cache.db`). No separate image files to manage or orphan.
 
-Cache entries are keyed by **full-file MD5 hash + resolution** — the same file at different resolutions (512, 1024, 2048) are stored as separate entries. Identical files across different paths share a single cache entry per resolution.
+Cache entries are keyed by **first-1MB MD5 hash + resolution** — fast over network storage (SAMBA) while still unique for deduplication. The same file at different resolutions (512, 1024, 2048) are stored as separate entries. Identical files across different paths share a single cache entry per resolution.
 
 Override cache location:
 - CLI flag: `-C /path/to/cache` or `--cache-dir /path/to/cache`
