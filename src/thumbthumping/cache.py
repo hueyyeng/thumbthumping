@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS meta (
     key   TEXT PRIMARY KEY,
     value TEXT NOT NULL
 );
-INSERT OR REPLACE INTO meta ('schema_v') VALUES ({_SCHEMA_V});
+INSERT OR IGNORE INTO meta (key, value) VALUES ('schema_v', '{_SCHEMA_V}');
 """
 
 
