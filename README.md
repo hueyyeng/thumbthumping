@@ -1,13 +1,13 @@
 # thumbthumping
 
-Fast 3D model thumbnails via [F3D](https://github.com/graphicslab/f3d). Here I stand... at 512x512 (or whatever you want).
+Fast 3D model thumbnails via [F3D](https://github.com/f3d-app/f3d). Here I stand... at 512x512 (or whatever you want).
 
 Generates quarter-view perspective thumbnails and optional 6-view orthographic atlases from any 3D file F3D can read (FBX, OBJ, GLB, PLY, STL, etc.). Caches results in a single SQLite database keyed by content hash — no orphaned files, portable everywhere.
 
 ## Requirements
 
 - **Python 3.11+** (stdlib only)
-- **[F3D](https://github.com/graphicslab/f3d)** on PATH (or set `F3D_EXE` env var)
+- **[F3D](https://github.com/f3d-app/f3d)** on PATH (or set `F3D_EXE` env var)
 
 Optional:
 - **ImageMagick** (`magick montage`) for 6-view stitching on Linux
