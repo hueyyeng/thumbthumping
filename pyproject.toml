@@ -1,0 +1,16 @@
+[project]
+name = "thumbthumping"
+version = "0.1.0"
+description = "Fast 3D model thumbnails via F3D. Here I stand... at 512x512."
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+sixview = ["pillow"]
+
+[project.scripts]
+thumbthumping = "thumbthumping.cli:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
