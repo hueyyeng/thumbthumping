@@ -2,7 +2,7 @@
 
 __version__ = "0.1.0"
 
-from .cache import init_db, lookup_cache, save_to_cache, delete_from_cache
+from .cache import init_db, lookup_cache, save_to_cache, delete_from_cache, set_cache_dir
 from .renderer import generate_quarter_view, get_stats
 from .sixview import generate_sixview
 
@@ -14,4 +14,5 @@ __all__ = [
     "lookup_cache",
     "save_to_cache",
     "delete_from_cache",
+    "set_cache_dir",
 ]

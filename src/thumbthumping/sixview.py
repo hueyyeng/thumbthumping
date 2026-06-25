@@ -95,7 +95,7 @@ def generate_sixview(
         # Stitch using ImageMagick montage (preferred) or Pillow fallback
         if find_magick():
             log.debug("Stitching with ImageMagick...")
-            _stitch_with_magick(view_paths, output_path)
+            _stitch_with_magick(view_paths, output_path, width, height)
         else:
             try:
                 log.debug("ImageMagick not found, stitching with Pillow...")
@@ -123,12 +123,12 @@ def generate_sixview(
                 os.unlink(f)
 
 
-def _stitch_with_magick(view_paths: list[str], output_path: str) -> None:
+def _stitch_with_magick(view_paths: list[str], output_path: str, width: int = 512, height: int = 512) -> None:
     """Stitch individual view images into a grid atlas using ImageMagick montage."""
     subprocess.run(
         [find_magick(), "montage"] +
         ["-tile", f"{COLS}x"] +
-        ["-geometry", "512x512+0+0"] +
+        ["-geometry", f"{width}x{height}+0+0"] +
         view_paths +
         [output_path],
         capture_output=True, text=True, timeout=30,
