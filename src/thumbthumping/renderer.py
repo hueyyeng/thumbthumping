@@ -15,8 +15,8 @@ log = logging.getLogger(__name__)
 DEFAULT_COLOR = "0.65,0.65,0.65"
 DEFAULT_BACKGROUND = "0.2,0.2,0.2"
 
-# Quarter view camera direction (nice 3/4 upright perspective)
-QUARTER_DIRECTION = "1,-0.3,1"
+# Quarter view camera direction: front-left 3/4 perspective
+QUARTER_DIRECTION = "-1,-0.3,-1"
 
 
 def find_f3d() -> str:
