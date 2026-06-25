@@ -126,21 +126,56 @@ Output structure:
     └── prop_table_7e9d0f1a_512x512.png
 ```
 
-## Workflow Example
+## Studio Workflow — Automated Thumbnail Pipeline
 
-Generate thumbnails for an entire project, then export for a dashboard or report:
+A common studio setup: scan all FBX assets nightly, generate thumbnails, and export them for a web dashboard or PDF report.
+
+### 1. Scan and generate
 
 ```bash
-# Generate all assets (with custom cache dir)
-for f in /project/assets/*.fbx; do
-    thumbthumping -C /data/project-cache generate "$f" --sixview -R 1024x1024
+#!/bin/bash
+# scripts/update_thumbnails.sh
+CACHE_DIR="/mnt/shared/thumbthumping-cache"
+OUTPUT_DIR="/var/www/html/asset-browser/thumbnails"
+RESOLUTION="1024x1024"
+
+# Find all FBX files across project directories
+find /mnt/projects/characters \
+     /mnt/projects/props \
+     /mnt/projects/environments \
+  -name "*.fbx" | while read -r fbx; do
+    thumbthumping -C "$CACHE_DIR" generate "$fbx" --sixview -R "$RESOLUTION"
 done
 
-# Export PNGs for Nuxt dashboard, PDF report, etc.
-thumbthumping -C /data/project-cache export /output/thumbnails --sixview
+# Export all thumbnails to a web-accessible directory
+thumbthumping -C "$CACHE_DIR" export "$OUTPUT_DIR" --sixview
 ```
 
-The SQLite DB is portable — copy it anywhere and point `-C` at its parent directory.
+### 2. Automate with cron
+
+```cron
+# Run every night at 2 AM, skip if already running
+0 2 * * * flock /tmp/thumbthumping.lock /path/to/scripts/update_thumbnails.sh >> /var/log/thumbthumping.log 2>&1
+```
+
+The cache handles deduplication automatically — files that haven't changed are skipped instantly. New or modified FBX files get rendered. Over SAMBA, the first-1MB hash check is fast enough to scan hundreds of files in seconds.
+
+### 3. Serve from anywhere
+
+The exported PNGs are plain files — serve them with Nginx, drop them into a Nuxt dashboard, embed them in a PDF report, or mount the directory on any browser-accessible path. The SQLite DB is portable too — copy it to another machine and point `-C` at its parent directory.
+
+Output structure:
+```
+/var/www/html/asset-browser/thumbnails/
+├── quarter/
+│   ├── hero_rig_a3f1b2c4_1024x1024.png
+│   ├── prop_chair_7e9d0f1a_1024x1024.png
+│   └── env_forest_2b8c3d4e_1024x1024.png
+└── sixview/
+    ├── hero_rig_a3f1b2c4_1024x1024.png
+    ├── prop_chair_7e9d0f1a_1024x1024.png
+    └── env_forest_2b8c3d4e_1024x1024.png
+```
 
 ## Environment Variables
 
